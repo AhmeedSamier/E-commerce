@@ -10,9 +10,6 @@ import Categories from './Component/Categories/BrandsAndCategoriesPage';
 import ProductDetails from './Component/ProductDetails/ProductDetails';
 import Login from './Component/Login/Login';
 import Register from './Component/Register/Register';
-//import NotFound from './Component/NotFound/Notfound';
-
-
 import { CartProvider } from './Context/CartContext';
 //import ScrollToTop from './Component/ScrollToTop';
 import { UserProvider } from './Context/UserContext1'; // Renamed to UserProvider
@@ -22,7 +19,7 @@ import Profile from './Component/Profile/Profile';
 import { WishlistProvider } from './Context/WishlistContext'; // Import WishlistProvider
 import WishlistPage from './Component/Cart/WishlistPage'; // Import WishlistPage
 import { ToastContainer } from 'react-toastify';
-import Notfound from './Component/NotFound/NotFound';
+import NotFound from './Component/NotFound/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -41,7 +38,7 @@ const router = createBrowserRouter([
       { path: 'profile', element: <Profile /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
-      { path: '*', element: <Notfound /> }
+     { path: '*', element: <NotFound /> }
     ]
   }
 ]);
