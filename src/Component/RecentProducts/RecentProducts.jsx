@@ -1,73 +1,107 @@
-// src/Component/RecentProducts/RecentProducts.jsx
-import React from 'react'
-import axios from 'axios'
-import { useEffect, useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { FaStar, FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../Context/CartContext'; // استيراد useCart
+import { useCart } from '../../Context/CartContext';
+import { useWishlist } from '../../Context/WishlistContext';
+import { toast } from 'react-toastify';
 
 function RecentProducts() {
-    const [recentProducts, setRecentProducts] = useState([]);
-    const { addToCart } = useCart(); // استيراد addToCart
+  const [recentProducts, setRecentProducts] = useState([]);
+  const { addToCart, isInCart } = useCart();
+  const { addToWishlist, isInWishlist } = useWishlist();
 
-    function getRecentProducts() 
-    {
-        axios.get('https://fakestoreapi.com/products')   
-        .then(response => {
-            setRecentProducts(response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching products:', error);
-        });
-    }
+  function getRecentProducts() {
+    axios
+      .get('https://fakestoreapi.com/products')
+      .then(response => {
+        setRecentProducts(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }
 
-    useEffect(() => {
-        getRecentProducts();    
-    }, []);
+  useEffect(() => {
+    getRecentProducts();
+  }, []);
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+    toast.success(`${product.title} added to Cart 🛒`);
+  };
+
+  const handleAddToWishlist = (product) => {
+    addToWishlist(product);
+    toast.info(`${product.title} added to Wishlist ❤️`);
+  };
 
   return (
     <div className="container mx-auto py-8">
       <h2 className="text-3xl font-bold text-center mb-8">Featured Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {recentProducts.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
-            <Link to={`/productDetails/${product.id}`}>
-              <div className="p-4">
-                <img 
-                  src={product.image} 
-                  alt={product.title} 
-                  className="w-full h-48 object-contain"
-                />
-                <h2 className="text-lg font-semibold mt-4 h-14 overflow-hidden">
-                  {product.title}
-                </h2>
-                <p className="text-sm text-gray-500 mt-2 h-12 overflow-hidden">
-                  {product.description.slice(0, 50)}...
-                </p>
-              </div>
-            </Link>
-            
-            <div className="p-4 border-t border-gray-100">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-lg font-bold text-blue-600">${product.price}</span>
-                <span className="flex items-center gap-1">
-                  {product.rating.rate}
-                  <FaStar className="text-yellow-500" />
-                </span>
-              </div>
+          <div
+            key={product.id}
+            className="group transform transition-transform duration-300 hover:-translate-y-1"
+          >
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 border border-gray-100 group-hover:shadow-2xl group-hover:border-sky-200 h-full flex flex-col">
               
-              <button 
-                onClick={(e) => {
-                  e.preventDefault();
-                  addToCart(product);
-                }}
-                className="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-md transition flex items-center justify-center"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
-                </svg>
-                Add to Cart
-              </button>
+              <div className="relative flex-grow">
+                <Link to={`/productDetails/${product.id}`} className="block h-full">
+                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center p-4">
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="max-h-48 max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                </Link>
+
+                <div className="absolute top-3 right-3">
+                  <button
+                    className={`rounded-full p-2 shadow-md transition-colors ${
+                      isInWishlist && isInWishlist(product.id)
+                        ? 'bg-red-100 text-red-500'
+                        : 'bg-white text-gray-400 hover:text-red-500'
+                    }`}
+                    onClick={() => handleAddToWishlist(product)}
+                  >
+                    <FaHeart
+                      className={isInWishlist && isInWishlist(product.id) ? 'text-red-500' : ''}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-4 flex flex-col flex-grow">
+                <Link to={`/productDetails/${product.id}`} className="flex-grow">
+                  <h3 className="font-semibold text-gray-800 group-hover:text-sky-600 transition-colors line-clamp-2 mb-2">
+                    {product.title}
+                  </h3>
+                </Link>
+
+                <div className="flex justify-between items-center mt-3">
+                  <span className="text-lg font-bold text-sky-600">
+                    ${product.price.toFixed(2)}
+                  </span>
+                  <span className="flex items-center gap-1 text-sm text-gray-500">
+                    {product.rating.rate} <FaStar className="text-yellow-500" />
+                  </span>
+                </div>
+
+                <div className="mt-4">
+                  <button
+                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white py-3 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <FaShoppingCart />
+                    <span>Add to Cart</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ))}
@@ -77,3 +111,4 @@ function RecentProducts() {
 }
 
 export default RecentProducts;
+

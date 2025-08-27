@@ -1,22 +1,4 @@
-// import { createContext,useState,useEffect } from "react";
-// export let UserContext = createContext(null);
-// export default function UserContextProvider(props) {
-//     const [userLogIn, setUserLogIn] = useState(null);
-//     useEffect(() => {
-//         if (localStorage.getItem('token') !==null){
-//             setUserLogIn(localStorage.getItem('token'));   
-//         }
-//     }, []);
-//   return (
-//     <UserContext.Provider value={{userLogIn, setUserLogIn}}>
-//       {props.children}
-//     </UserContext.Provider>
-//   );
-// }
 
-// src/Context/UserContext1.jsx
-// src/Context/UserContext1.jsx
-// src/Context/UserContext1.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create and export the context

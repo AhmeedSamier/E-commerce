@@ -106,7 +106,9 @@ const CategoriesSlider = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg p-6 mx-4 my-8 max-w-6xl ">
+   
+     <div className="w-full flex justify-center my-8">
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg p-6 max-w-6xl w-full mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
@@ -151,7 +153,9 @@ const CategoriesSlider = () => {
         ))}
       </Slider>
     </div>
-  );
+  </div>
+);
+  
 };
 
 export default CategoriesSlider;
