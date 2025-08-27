@@ -1,0 +1,19 @@
+{
+  "usesTypeScript": true,
+  "usesStyledComponents": true,
+  "usesCssModule": false,
+  "cssPreprocessor": "scss",
+  "testLibrary": "Jest",
+  "component": {
+    "default": {
+      "customTemplates": {
+          "component": "Template/TemplateName"
+    },
+      "path": "src/components",
+      "withStyle": false,
+      "withTest": true,
+      "withStory": true,
+      "withLazy": true
+    }
+  }
+}
